@@ -6,24 +6,24 @@ AI 502 | Project 2 | Ben Grob
 
 ## Overview
 
-<!-- 2-3 sentences: what the app does, who it's for, and what problem it solves. -->
-<!-- Example: "This is an agentic system that automates the sponsorship prospecting and outreach process for the GVSU Men's Club Soccer Golf Outing. It finds local businesses, researches contact information, and drafts personalized emails — replacing 10+ hours of manual work with a single user interaction." -->
+This is an agentic system that aims to automate the sponsorship prospecting and outreach process for the GVSU Men's Club Soccer Golf Outing. It finds local businesses, researches contact information, and drafts personalized emails — replacing hours of manual work with a single user interaction.
 
-**Live demo:** [link here]
-**GitHub:** [link here]
+The GVSU club soccer teams (and all other clubs) pay to play. This means that just about everyone on the team works full-time doing something else. To reduce the fees of playing, the team holds it's main
+fundraiser in the form of an alumni golf outing each year. It is now up to the players on the Eboard, mostly me as the fundraising chair, and another alumn to organize this event. Simply put, I don't have a lot of time, and neither do my teammates. I'm hoping to save some time in the process with this automation.
+
+**Live demo:** [[link here](https://prospect-pal-gr.lovable.app/)]
 
 ---
 
 ## Problem
 
-<!-- 1 short paragraph on the real-world pain point this solves. -->
-<!-- Pull from your prd.md — the "I don't know where to send them" quote is good here. -->
+Sending out cold emails is already an uphill battle, so it is important to personalize them. There are two major hurdles in doing this.
+* manually searching for companies takes a large amount of time, I have a letter template but don't know where to send them.
+* Emails need to be individual, so there is no easy way to send these all out manually.
 
 ---
 
 ## Agentic Architecture
-
-<!-- Describe your 6-agent pipeline. A short paragraph + the table below works well. -->
 
 This project uses a 6-agent pipeline with a model waterfall design:
 
@@ -53,8 +53,6 @@ This project uses a 6-agent pipeline with a model waterfall design:
 
 ## Features
 
-<!-- Short bulleted list of what the app actually does. Keep it to what's built, not what's planned. -->
-
 - [ ] Business prospecting by category and location
 - [ ] Contact enrichment (owner name + email)
 - [ ] Personalized email drafting with PDF attachment instruction
@@ -76,107 +74,71 @@ This project uses a 6-agent pipeline with a model waterfall design:
 
 ---
 
-## Multi-Model Design
-
-<!-- Required for AI 502 graduate tier. -->
-<!-- Describe how you compared models on the same task and what you found. -->
-<!-- Example: "The Copywriter agent prompt was run on both Claude Sonnet and Gemini Flash. Claude produced more natural, specific openers — Gemini tended toward more formal language. Both preserved required contact info correctly." -->
-
-**Models compared:** Claude Sonnet 4.6 vs. [second model]
-**Task:** Copywriter agent — personalized email intro
-**Finding:** [your honest comparison — 2-3 sentences]
-
----
-
 ## Evaluation
 
-<!-- Required rubric item. Document what you tested and what you found. -->
+One of the major gaps of this draft I would think. As a human I have two critical responsibilities in the project, the planning, and the feedback. While I have sub agents to review the outputs,
+I still need to give feedback on another iteration. As of now, each response is given a pass/flag and a score from 1-5. The evaluation is there, but I need to evaluate the evaluation.
 
 ### Tests Run
 
 | Test | Expected | Result |
 |---|---|---|
-| Prospector — returns local businesses | 8–12 results | [fill in] |
-| Copywriter — no generic placeholders | 0 generic openers | [fill in] |
-| Reviewer — catches planted bad email | FLAG returned | [fill in] |
-| Persona Evaluator — scores correlate with quality | Low scores on generic emails | [fill in] |
-| End-to-end runtime | Under 3 minutes | [fill in] |
-| Human spot-check — would you send this? | 4/5 emails usable | [fill in] |
+| Prospector — returns local businesses | 8–12 results | satisfied |
+| Copywriter — no generic placeholders | 0 generic openers | satisfied |
+| Reviewer — catches planted bad email | FLAG returned | N/A (see limitations below) |
+| Persona Evaluator — scores correlate with quality | Low scores on generic emails | seems to be working (see evaluation above) |
+| End-to-end runtime | Under 3 minutes | satisfied |
+| Human spot-check — would you send this? | 4/5 emails usable | hypothetically yes (see limitations below |
 
 ### Failure Analysis
 
-<!-- Honest assessment of what doesn't work well yet. This is a rubric item — don't skip it. -->
-<!-- Current known limitation: prospecting uses AI-generated business data, not live web search. -->
-
 **Known limitations:**
-- Prospecting is currently simulated (Claude generates plausible businesses from training data rather than searching the live web). Contact details may not be accurate and should be verified before sending.
-- [any other limitations you observed]
+- Prospecting is currently simulated (Claude generates plausible businesses from training data rather than searching the live web). <-- this is the biggest issue
+- providing an api key is kind of funny for a public facing app, I may navigate this differently for the second submission
+- There is a narrow gap between a generic template and sounding fake and pretending that we have an existing relationship with the business. I hope to find the sweet spot or get closer to it.
 
 **What I would do differently:**
-- [your honest answer — e.g. "Run the backend on a server to enable real web search calls"]
+- I would make the switch from claude to copilot earlier, this would keep the feedback I give presistint from planning to building, and would have also made me more aware of my usage limits.
+- Spend a greater time talking with claude about what I want the final product to look like. Including a requirements document would have helped to clear any misunderstandings between me and the ai
+- Focus on the live web search first since this is whats the most important
 
 ---
 
 ## Build Log
-
-<!-- Required rubric item: "a build log of the prompts used." -->
-<!-- Document the key prompts and decisions that shaped the build. Be specific — this shows AI-assisted development. -->
+**Key Context given to claude** - Ledger transcripts, syllabus for the rubric, workflow implementation doc, the letter template, and my key objectives
 
 ### Session 1 — Problem Definition & Architecture
 **Tool:** Claude.ai
-**Key prompt:** *"I'm building a project for AI 502. I'm the fundraising chair for a club soccer team. I need to find and email 30–100 local businesses for golf outing sponsorships. Help me design an agentic pipeline."*
+**Key prompt:** *I'm building a project for AI 502. I'm the fundraising chair for a club soccer team. I need to find and email 30–100 local businesses for golf outing sponsorships. Help me design an agentic pipeline referencing the workflow implementation doc*
 **Output:** 6-agent architecture, PRD, copilot-instructions.md, evaluation criteria
 **Decision made:** Short email intro + PDF attachment approach instead of full letter in email body
 
-### Session 2 — Agent Harness
-**Tool:** Claude.ai
-**Key prompt:** *[paste the main prompt you used to generate the React artifact]*
-**Output:** Full React app with all 6 agents implemented as API calls
-**Decision made:** Used Anthropic API instead of Gemini due to CORS limitations in browser-based artifacts
-
-### Session 3 — Deployment
+### Session 2 — Deployment
 **Tool:** Lovable
-**Key prompt:** *[paste what you told Lovable]*
-**Output:** [describe what deployed successfully]
-**Decision made:** [anything you had to adjust for deployment]
+**Key prompt:** *"Build me a React app using this component. (passed component from Claude)
 
-<!-- Add more sessions as you continue building -->
+This system automates the sponsorship prospecting and outreach process for the GVSU Men's Club Soccer Golf Outing. It finds local businesses in the Grand Rapids / Allendale, MI area, researches contacts, and drafts personalized sponsorship emails"*
+
+**Output:** A simple deployed prototype that put the current state of the project on screen.
+
 
 ---
 
 ## Ethical & Practical Limits
 
-<!-- Required rubric item for AI 502. 3-5 sentences is enough. -->
-
 - **Human in the loop:** The agent drafts emails but does not send them. The user reviews every email before sending, preserving human judgment on outreach decisions.
 - **Data accuracy:** Contact information is AI-generated and unverified in the current prototype. Users should verify emails before sending to avoid misdirected outreach.
 - **Scope:** This tool is designed for a specific, low-stakes outreach context. It should not be used for high-volume cold email campaigns without a real web search backend and compliance review.
-- [add any other limits you observed]
-
----
-
-## Project Files
-
-```
-sponsor-outreach-agent/
-├── README.md                    ← this file
-├── architecture.md              ← system design and agent diagram
-├── prd.md                       ← product requirements
-├── copilot-instructions.md      ← master rules for all agents
-├── evaluation.md                ← success metrics and test results
-├── development-checklist.md     ← phased build plan
-├── project-phases-reference.md  ← phase-by-phase guide
-└── src/
-    └── SponsorOutreachAgent.jsx ← main application
-```
 
 ---
 
 ## What's Next
 
-<!-- Optional but good to include — shows forward thinking. -->
-
+### Neccesary
 - Replace simulated prospecting with real web search via a server-side backend
+- Test the review system to make sure information is accurate
+- Refine email response's tone and content
+
+### Nice to haves
 - Add response tracking (mark businesses as contacted, replied, or passed)
 - Expand to multiple business categories in one session
-- Test against real outreach to measure actual sponsor conversion rate
